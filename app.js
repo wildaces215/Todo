@@ -1,24 +1,30 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const cors = require('cors')
+const cors = require("cors");
 const taskSchema = require("./models/models");
+const path = require("path");
 
 mongoose.connect("mongodb://localhost/theTasks");
 let db = mongoose.connection;
 app = express();
+app.use(express.static(__dirname + "/dist"));
 
 //app.use(cors);
 //app.options('*', cors())
 
-
 app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE")
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+  );
   next();
 });
-
 
 db.on("error", err => {
   console.log(err);
@@ -60,9 +66,12 @@ app.put("/api/update/:id", async (req, res, next) => {
   res.send(data_return);
 });
 //Delete Task
-app.delete("/api/tasks/delete/:id",async (req,res,next)=>{
-  var data = await taskSchema.deleteOne({_id:req.params.id}).exec();
+app.delete("/api/tasks/delete/:id", async (req, res, next) => {
+  var data = await taskSchema.deleteOne({ _id: req.params.id }).exec();
   res.send(data);
+});
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname + "/dist/index.html"));
 });
 
 app.listen(4000, (req, res) => {

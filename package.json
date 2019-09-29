@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"nodemon app.js\" \"cd client && npm run serve\" ",
-    "client": "cd client && npm run serve"
+    "client": "cd client && npm run serve",
+    "prod": "node app.js"
   },
   "keywords": [],
   "author": "",
